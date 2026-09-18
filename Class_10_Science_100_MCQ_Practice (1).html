@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 10 Science - 100 MCQ Practice</title>
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family:Arial,sans-serif;
+color:#172033;
+min-height:100vh;
+background:
+radial-gradient(circle at 10% 15%, rgba(255,255,255,.95) 0 7%, transparent 25%),
+radial-gradient(circle at 90% 10%, rgba(191,219,254,.75) 0 8%, transparent 28%),
+radial-gradient(circle at 80% 90%, rgba(221,214,254,.75) 0 10%, transparent 30%),
+linear-gradient(135deg,#dbeafe 0%,#eef2ff 45%,#f8fafc 100%);
+background-attachment:fixed;
+}
+.container{max-width:900px;margin:30px auto;padding:20px}
+header{background:#0f4c81;color:white;border-radius:18px;padding:25px;text-align:center;box-shadow:0 8px 25px #0002}
+header h1{margin:0 0 8px;font-size:30px}
+header p{margin:0;font-size:16px}.mark{display:inline-block;background:#fff3cd;color:#7a5300;padding:5px 9px;border-radius:8px;font-size:13px;margin-left:6px}.review-q{padding:16px;margin:12px 0;border:1px solid #d7dee8;border-radius:12px}.review-q.correct-box{border-left:6px solid #16a34a}.review-q.wrong-box{border-left:6px solid #dc2626}.review-q.unanswered-box{border-left:6px solid #64748b}.review-opt{padding:8px 10px;margin:5px 0;border-radius:8px}.review-opt.correct-opt{background:#b9f6c3}.review-opt.wrong-opt{background:#ffc2c2}
+.topbar{display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;margin:18px 0}
+.badge{background:white;padding:12px 18px;border-radius:12px;box-shadow:0 3px 12px #0001;font-weight:bold}
+.card{background:white;border-radius:18px;padding:25px;box-shadow:0 8px 25px #0001}
+.chapter{color:#0f4c81;font-weight:bold;margin-bottom:10px}
+.question{font-size:21px;font-weight:bold;line-height:1.45;margin:12px 0 20px}
+.option{width:100%;border:2px solid #d7dee8;background:#fff;padding:14px 16px;margin:9px 0;border-radius:12px;text-align:left;font-size:16px;cursor:pointer;transition:.2s}
+.option:hover:not(.locked){background:#eef7ff;border-color:#5aa9e6}
+.option.correct{background:#b9f6c3;border-color:#16a34a;color:#075b24}
+.option.wrong{background:#ffc2c2;border-color:#dc2626;color:#8b1010}
+.option.locked{cursor:not-allowed}
+.explanation{margin-top:15px;padding:12px;border-radius:10px;background:#f1f5f9;display:none}
+button.nav{margin-top:20px;border:0;border-radius:12px;padding:13px 24px;background:#0f4c81;color:#fff;font-size:16px;cursor:pointer}
+button.nav:disabled{opacity:.45;cursor:not-allowed}
+#result{text-align:center;display:none}
+.score{font-size:42px;font-weight:bold;color:#0f4c81}
+.restart{background:#16a34a!important}
+select{padding:10px;border-radius:10px;border:1px solid #ccd5df}
+@media(max-width:600px){header h1{font-size:23px}.question{font-size:18px}.container{padding:10px}}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>📚 Class 10 Science MCQ Practice</h1>
+<p>NCERT-based practice • 100 Objective Questions</p>
+</header>
+
+<div class="topbar">
+<div class="badge">Question: <span id="qno">1</span>/100</div>
+<div class="badge">Score: <span id="score">0</span></div>
+<div class="badge">Answered: <span id="answered">0</span>/100</div>
+</div>
+
+<div class="card" id="quizCard">
+<div class="chapter" id="chapter"></div>
+<div class="question" id="question"></div>
+<div id="options"></div>
+<div class="explanation" id="explanation"></div>
+<button class="nav" id="nextBtn" onclick="nextQuestion()" disabled>Next Question →</button>
+<button class="nav" id="submitBtn" onclick="submitPaper()" style="margin-left:8px;background:#16a34a;">Submit Paper ✓</button>
+</div>
+
+<div class="card" id="result">
+<h2>🎉 Result</h2>
+<div class="score" id="finalScore"></div>
+<p id="resultText"></p>
+<p><b>Total Marks:</b> 200 &nbsp; | &nbsp; <b>Marks Obtained:</b> <span id="marksObtained">0</span>/200</p>
+<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px">
+<button class="nav" onclick="showPaper()">📄 Show Paper</button>
+<button class="nav" onclick="showWrong()">❌ Wrong Answers</button>
+<button class="nav restart" onclick="restartQuiz()">🔄 Practice Again</button>
+</div>
+</div>
+
+<div class="card" id="paper" style="display:none;margin-top:18px">
+<h2>📄 Complete Paper Review</h2>
+<p>🟢 Correct answer &nbsp;&nbsp; 🔴 Wrong answer &nbsp;&nbsp; ⚪ Not answered</p>
+<div id="paperContent"></div>
+</div>
+
+<div class="card" id="wrong" style="display:none;margin-top:18px">
+<h2>❌ Wrong Answers</h2>
+<div id="wrongContent"></div>
+</div>
+</div>
+
+<script>
+const questions = [
+/* Life Processes 1-15 */
+{c:"Life Processes",q:"Which process is responsible for the intake of food in Amoeba?",o:["Respiration","Nutrition","Excretion","Reproduction"],a:1},
+{c:"Life Processes",q:"The green pigment required for photosynthesis is called:",o:["Haemoglobin","Chlorophyll","Melanin","Keratin"],a:1},
+{c:"Life Processes",q:"Which gas is released during photosynthesis?",o:["Carbon dioxide","Nitrogen","Oxygen","Hydrogen"],a:2},
+{c:"Life Processes",q:"The functional unit of the kidney is:",o:["Neuron","Nephron","Alveolus","Villus"],a:1},
+{c:"Life Processes",q:"Which blood vessel carries oxygenated blood from lungs to heart?",o:["Pulmonary artery","Pulmonary vein","Aorta","Vena cava"],a:1},
+{c:"Life Processes",q:"The breakdown of glucose in cells to release energy is called:",o:["Digestion","Respiration","Transpiration","Filtration"],a:1},
+{c:"Life Processes",q:"Where does most absorption of digested food occur?",o:["Stomach","Large intestine","Small intestine","Oesophagus"],a:2},
+{c:"Life Processes",q:"Which enzyme is present in saliva?",o:["Pepsin","Trypsin","Salivary amylase","Lipase"],a:2},
+{c:"Life Processes",q:"The pumping organ of the human circulatory system is:",o:["Lung","Heart","Kidney","Liver"],a:1},
+{c:"Life Processes",q:"Which component of blood helps in clotting?",o:["RBCs","WBCs","Platelets","Plasma"],a:2},
+{c:"Life Processes",q:"Water is transported in plants mainly through:",o:["Phloem","Xylem","Stomata","Root hairs"],a:1},
+{c:"Life Processes",q:"Food is transported in plants through:",o:["Xylem","Phloem","Stomata","Epidermis"],a:1},
+{c:"Life Processes",q:"Tiny pores on the surface of leaves are called:",o:["Nephrons","Stomata","Villi","Alveoli"],a:1},
+{c:"Life Processes",q:"The removal of metabolic wastes from the body is called:",o:["Nutrition","Respiration","Excretion","Circulation"],a:2},
+{c:"Life Processes",q:"Which organ produces bile?",o:["Pancreas","Liver","Stomach","Kidney"],a:1},
+
+/* Control and Coordination 16-28 */
+{c:"Control and Coordination",q:"The structural and functional unit of the nervous system is:",o:["Neuron","Nephron","Alveolus","Axon"],a:0},
+{c:"Control and Coordination",q:"Which part of the brain controls balance and posture?",o:["Cerebrum","Cerebellum","Medulla","Hypothalamus"],a:1},
+{c:"Control and Coordination",q:"A quick automatic response to a stimulus is called:",o:["Reflex action","Growth","Tropism","Secretion"],a:0},
+{c:"Control and Coordination",q:"The gap between two neurons is called:",o:["Synapse","Dendrite","Cell body","Receptor"],a:0},
+{c:"Control and Coordination",q:"Which hormone regulates blood sugar level?",o:["Thyroxine","Insulin","Adrenaline","Auxin"],a:1},
+{c:"Control and Coordination",q:"The plant hormone responsible mainly for cell growth is:",o:["Auxin","Insulin","Adrenaline","Thyroxine"],a:0},
+{c:"Control and Coordination",q:"Growth of a plant shoot towards light is called:",o:["Geotropism","Phototropism","Hydrotropism","Chemotropism"],a:1},
+{c:"Control and Coordination",q:"Which gland secretes thyroxine?",o:["Pituitary","Thyroid","Pancreas","Adrenal"],a:1},
+{c:"Control and Coordination",q:"Adrenaline is secreted by the:",o:["Adrenal glands","Thyroid gland","Pancreas","Pituitary gland"],a:0},
+{c:"Control and Coordination",q:"The part of a neuron that receives impulses is:",o:["Axon","Dendrite","Synapse","Nucleus"],a:1},
+{c:"Control and Coordination",q:"Which brain part controls involuntary actions such as heartbeat?",o:["Cerebrum","Cerebellum","Medulla","Spinal cord"],a:2},
+{c:"Control and Coordination",q:"Movement of plant roots towards water is called:",o:["Phototropism","Hydrotropism","Geotropism","Chemotropism"],a:1},
+{c:"Control and Coordination",q:"Which hormone promotes growth in children?",o:["Growth hormone","Insulin","Adrenaline","Oestrogen"],a:0},
+
+/* Reproduction 29-41 */
+{c:"How do Organisms Reproduce?",q:"Reproduction involving only one parent is called:",o:["Sexual reproduction","Asexual reproduction","Fertilisation","Pollination"],a:1},
+{c:"How do Organisms Reproduce?",q:"Budding is commonly seen in:",o:["Hydra","Human","Dog","Mango"],a:0},
+{c:"How do Organisms Reproduce?",q:"Binary fission is commonly seen in:",o:["Amoeba","Hydra","Rose","Yeast"],a:0},
+{c:"How do Organisms Reproduce?",q:"The male reproductive organ in a flower is:",o:["Carpel","Stamen","Sepal","Petal"],a:1},
+{c:"How do Organisms Reproduce?",q:"The female reproductive part of a flower is:",o:["Stamen","Carpel","Anther","Filament"],a:1},
+{c:"How do Organisms Reproduce?",q:"Transfer of pollen grains from anther to stigma is called:",o:["Fertilisation","Pollination","Germination","Budding"],a:1},
+{c:"How do Organisms Reproduce?",q:"Fusion of male and female gametes is called:",o:["Pollination","Fertilisation","Fragmentation","Regeneration"],a:1},
+{c:"How do Organisms Reproduce?",q:"In humans, fertilisation normally occurs in the:",o:["Uterus","Ovary","Fallopian tube","Vagina"],a:2},
+{c:"How do Organisms Reproduce?",q:"The hormone responsible for development of male secondary sexual characters is:",o:["Oestrogen","Testosterone","Insulin","Thyroxine"],a:1},
+{c:"How do Organisms Reproduce?",q:"The embryo gets nourishment from the mother through the:",o:["Placenta","Ovary","Cervix","Urethra"],a:0},
+{c:"How do Organisms Reproduce?",q:"Which contraceptive method acts as a barrier?",o:["Condom","Copper-T","Oral pills","Vasectomy"],a:0},
+{c:"How do Organisms Reproduce?",q:"Which organism reproduces by spores?",o:["Rhizopus","Human","Cow","Amoeba"],a:0},
+{c:"How do Organisms Reproduce?",q:"DNA copying during reproduction is important because it:",o:["Stops variation","Produces similarities and some variations","Prevents reproduction","Destroys genes"],a:1},
+
+/* Light 42-55 */
+{c:"Light – Reflection and Refraction",q:"The angle of incidence is equal to the angle of:",o:["Refraction","Reflection","Deviation","Dispersion"],a:1},
+{c:"Light – Reflection and Refraction",q:"A concave mirror is also called a:",o:["Converging mirror","Diverging mirror","Plane mirror","Transparent mirror"],a:0},
+{c:"Light – Reflection and Refraction",q:"A convex mirror always forms an image that is:",o:["Real and inverted","Virtual, erect and diminished","Real and enlarged","Virtual and inverted"],a:1},
+{c:"Light – Reflection and Refraction",q:"The SI unit of power of a lens is:",o:["Metre","Dioptre","Watt","Newton"],a:1},
+{c:"Light – Reflection and Refraction",q:"A convex lens is a:",o:["Converging lens","Diverging lens","Plane lens","Opaque lens"],a:0},
+{c:"Light – Reflection and Refraction",q:"A concave lens generally forms an image that is:",o:["Real and enlarged","Virtual, erect and diminished","Real and inverted","Virtual and enlarged"],a:1},
+{c:"Light – Reflection and Refraction",q:"The refractive index of a medium is related to the:",o:["Speed of light in vacuum and medium","Mass of object","Temperature only","Wavelength only"],a:0},
+{c:"Light – Reflection and Refraction",q:"The focal length of a spherical mirror is:",o:["R","R/2","2R","R/4"],a:1},
+{c:"Light – Reflection and Refraction",q:"Which mirror is used as a shaving mirror?",o:["Convex mirror","Concave mirror","Plane mirror","None"],a:1},
+{c:"Light – Reflection and Refraction",q:"The image formed by a plane mirror is:",o:["Real and inverted","Virtual and erect","Real and erect","Diminished and real"],a:1},
+{c:"Light – Reflection and Refraction",q:"When light travels from air into glass, it generally bends:",o:["Away from normal","Towards normal","Along the surface","It stops"],a:1},
+{c:"Light – Reflection and Refraction",q:"The formula for lens power is:",o:["P=f","P=1/f","P=f²","P=2f"],a:1},
+{c:"Light – Reflection and Refraction",q:"A ray passing through the optical centre of a thin lens:",o:["Bends strongly","Passes undeviated","Stops","Reflects back"],a:1},
+{c:"Light – Reflection and Refraction",q:"Which mirror is commonly used as a rear-view mirror in vehicles?",o:["Concave","Convex","Plane","Parabolic only"],a:1},
+
+/* Human Eye 56-66 */
+{c:"The Human Eye and the Colourful World",q:"The light-sensitive screen of the eye is the:",o:["Iris","Retina","Cornea","Pupil"],a:1},
+{c:"The Human Eye and the Colourful World",q:"The amount of light entering the eye is controlled by the:",o:["Retina","Iris","Lens","Optic nerve"],a:1},
+{c:"The Human Eye and the Colourful World",q:"The ability of the eye lens to adjust its focal length is called:",o:["Accommodation","Dispersion","Reflection","Scattering"],a:0},
+{c:"The Human Eye and the Colourful World",q:"Myopia is corrected using a:",o:["Convex lens","Concave lens","Cylindrical mirror","Plane lens"],a:1},
+{c:"The Human Eye and the Colourful World",q:"Hypermetropia is corrected using a:",o:["Concave lens","Convex lens","Plane mirror","Prism only"],a:1},
+{c:"The Human Eye and the Colourful World",q:"The least distance of distinct vision for a normal adult eye is about:",o:["10 cm","25 cm","50 cm","1 m"],a:1},
+{c:"The Human Eye and the Colourful World",q:"The splitting of white light into its component colours is called:",o:["Reflection","Dispersion","Diffusion","Interference"],a:1},
+{c:"The Human Eye and the Colourful World",q:"The blue colour of the sky is mainly due to:",o:["Reflection","Scattering of light","Refraction only","Absorption"],a:1},
+{c:"The Human Eye and the Colourful World",q:"The colour that is scattered most by the atmosphere is:",o:["Red","Blue","Yellow","Orange"],a:1},
+{c:"The Human Eye and the Colourful World",q:"Cataract affects the:",o:["Eye lens","Retina only","Optic nerve only","Iris only"],a:0},
+{c:"The Human Eye and the Colourful World",q:"The part that connects the eye to the brain is the:",o:["Optic nerve","Cornea","Iris","Ciliary muscle"],a:0},
+
+/* Electricity 67-79 */
+{c:"Electricity",q:"The SI unit of electric current is:",o:["Volt","Ampere","Ohm","Watt"],a:1},
+{c:"Electricity",q:"The SI unit of potential difference is:",o:["Ampere","Volt","Ohm","Joule"],a:1},
+{c:"Electricity",q:"The SI unit of resistance is:",o:["Ohm","Volt","Watt","Coulomb"],a:0},
+{c:"Electricity",q:"Ohm's law is represented by:",o:["V=IR","P=VI only","I=VR","R=VI"],a:0},
+{c:"Electricity",q:"If resistance is doubled while voltage remains constant, current becomes:",o:["Double","Half","Four times","Unchanged"],a:1},
+{c:"Electricity",q:"The commercial unit of electrical energy is:",o:["Watt","Kilowatt-hour","Volt","Ampere"],a:1},
+{c:"Electricity",q:"1 kWh is equal to:",o:["3.6×10^6 J","3.6×10^3 J","360 J","36 J"],a:0},
+{c:"Electricity",q:"Electric power is given by:",o:["P=VI","P=V/I","P=IR","P=I/R"],a:0},
+{c:"Electricity",q:"In a series circuit, the current through each resistor is:",o:["Different","Same","Zero","Always doubled"],a:1},
+{c:"Electricity",q:"In a parallel circuit, the potential difference across each branch is:",o:["Same","Always zero","Different by definition","Infinite"],a:0},
+{c:"Electricity",q:"Resistance of a wire increases when its length:",o:["Decreases","Increases","Becomes zero","Is unchanged"],a:1},
+{c:"Electricity",q:"A fuse is used to:",o:["Increase current","Protect a circuit from excessive current","Increase voltage","Store charge"],a:1},
+{c:"Electricity",q:"The heating effect of current is used in:",o:["Electric heater","Compass","Barometer","Microscope"],a:0},
+
+/* Metals 80-90 */
+{c:"Metals and Non-metals",q:"Which of the following is a metal?",o:["Sulphur","Oxygen","Iron","Carbon"],a:2},
+{c:"Metals and Non-metals",q:"Which metal is liquid at room temperature?",o:["Iron","Mercury","Aluminium","Copper"],a:1},
+{c:"Metals and Non-metals",q:"Metals generally form oxides that are:",o:["Basic","Only acidic","Always neutral","Always gaseous"],a:0},
+{c:"Metals and Non-metals",q:"Which non-metal is essential for respiration?",o:["Oxygen","Sulphur","Phosphorus","Chlorine"],a:0},
+{c:"Metals and Non-metals",q:"The process of coating iron with zinc is called:",o:["Alloying","Galvanisation","Roasting","Reduction"],a:1},
+{c:"Metals and Non-metals",q:"Which metal is extracted from bauxite?",o:["Iron","Aluminium","Copper","Zinc"],a:1},
+{c:"Metals and Non-metals",q:"An alloy of copper and zinc is:",o:["Bronze","Brass","Steel","Solder"],a:1},
+{c:"Metals and Non-metals",q:"Which metal is highly reactive and stored in kerosene?",o:["Sodium","Copper","Silver","Gold"],a:0},
+{c:"Metals and Non-metals",q:"Ionic compounds generally have:",o:["Low melting points","High melting points","No melting point","Only liquid state"],a:1},
+{c:"Metals and Non-metals",q:"Which metal is used for making electrical wires because of good conductivity?",o:["Copper","Sulphur","Phosphorus","Carbon"],a:0},
+{c:"Metals and Non-metals",q:"Rusting of iron requires:",o:["Only nitrogen","Oxygen and moisture","Only carbon dioxide","Only hydrogen"],a:1},
+
+/* Acids Bases 91-100 */
+{c:"Acids, Bases and Salts",q:"Acids turn blue litmus:",o:["Red","Green","Blue","Yellow"],a:0},
+{c:"Acids, Bases and Salts",q:"Bases turn red litmus:",o:["Blue","Red","Yellow","Colourless"],a:0},
+{c:"Acids, Bases and Salts",q:"The pH of a neutral solution at room temperature is:",o:["0","7","14","5"],a:1},
+{c:"Acids, Bases and Salts",q:"Which acid is present in vinegar?",o:["Hydrochloric acid","Acetic acid","Sulphuric acid","Nitric acid"],a:1},
+{c:"Acids, Bases and Salts",q:"Which acid is present in lemon juice?",o:["Citric acid","Acetic acid","Carbonic acid","Lactic acid"],a:0},
+{c:"Acids, Bases and Salts",q:"The reaction between an acid and a base is called:",o:["Oxidation","Neutralisation","Displacement","Decomposition"],a:1},
+{c:"Acids, Bases and Salts",q:"Baking soda is:",o:["Sodium hydrogen carbonate","Sodium chloride","Calcium carbonate","Sodium hydroxide"],a:0},
+{c:"Acids, Bases and Salts",q:"Common salt is chemically known as:",o:["NaOH","NaCl","HCl","Na2CO3"],a:1},
+{c:"Acids, Bases and Salts",q:"Bleaching powder is commonly represented as:",o:["CaOCl2","NaCl","CaCO3","NaHCO3"],a:0},
+{c:"Acids, Bases and Salts",q:"Tooth enamel begins to dissolve when the pH in the mouth falls below approximately:",o:["7.0","5.5","9.5","12"],a:1}
+];
+
+let current=0, score=0, answered=0, locked=false, submitted=false;
+const selectedAnswers = Array(questions.length).fill(null);
+
+function render(){
+  const x=questions[current];
+  document.getElementById("qno").textContent=current+1;
+  document.getElementById("chapter").innerHTML="📖 "+x.c+' <span class="mark">2 Marks</span>';
+  document.getElementById("question").textContent=(current+1)+". "+x.q;
+  const box=document.getElementById("options");
+  box.innerHTML="";
+  x.o.forEach((opt,i)=>{
+    const b=document.createElement("button");
+    b.className="option";
+    b.textContent=String.fromCharCode(65+i)+". "+opt;
+    b.onclick=()=>choose(i,b);
+    box.appendChild(b);
+  });
+  document.getElementById("explanation").style.display="none";
+  document.getElementById("nextBtn").disabled=true;
+  locked=selectedAnswers[current]!==null;
+  if(locked) restoreSelection();
+}
+
+function restoreSelection(){
+  const selected=selectedAnswers[current];
+  const buttons=document.querySelectorAll(".option");
+  buttons.forEach(b=>b.classList.add("locked"));
+  if(selected===questions[current].a){
+    buttons[selected].classList.add("correct");
+    document.getElementById("explanation").innerHTML="🟢 Correct Answer!";
+  }else{
+    buttons[selected].classList.add("wrong");
+    buttons[questions[current].a].classList.add("correct");
+    document.getElementById("explanation").innerHTML="🔴 Wrong Answer. The correct answer is <b>"+questions[current].o[questions[current].a]+"</b>.";
+  }
+  document.getElementById("explanation").style.display="block";
+  document.getElementById("nextBtn").disabled=false;
+}
+
+function choose(i,btn){
+  if(locked || submitted)return;
+  locked=true;
+  selectedAnswers[current]=i;
+  answered++;
+  document.getElementById("answered").textContent=answered;
+  const buttons=document.querySelectorAll(".option");
+  buttons.forEach(b=>b.classList.add("locked"));
+  if(i===questions[current].a){
+    btn.classList.add("correct");
+    score++;
+    document.getElementById("score").textContent=score;
+    document.getElementById("explanation").innerHTML="🟢 Correct Answer! <b>+2 Marks</b>";
+  }else{
+    btn.classList.add("wrong");
+    buttons[questions[current].a].classList.add("correct");
+    document.getElementById("explanation").innerHTML="🔴 Wrong Answer. The correct answer is <b>"+questions[current].o[questions[current].a]+"</b>.";
+  }
+  document.getElementById("explanation").style.display="block";
+  document.getElementById("nextBtn").disabled=false;
+}
+
+function nextQuestion(){
+  if(!locked || submitted)return;
+  current++;
+  if(current>=questions.length){current=questions.length-1;return;}
+  render();
+}
+
+function submitPaper(){
+  if(submitted)return;
+  if(answered<questions.length){
+    const ok=confirm("Aapne "+(questions.length-answered)+" questions attempt nahi kiye hain. Kya paper submit karna hai?");
+    if(!ok)return;
+  }
+  submitted=true;
+  document.getElementById("quizCard").style.display="none";
+  document.getElementById("result").style.display="block";
+  document.getElementById("marksObtained").textContent=(score*2);
+  document.getElementById("finalScore").textContent=(score*2)+" / 200";
+  const p=(score/questions.length)*100;
+  document.getElementById("resultText").textContent="Correct Answers: "+score+" / 100 | Wrong Answers: "+(answered-score)+" | Not Attempted: "+(questions.length-answered)+" | Percentage: "+p.toFixed(1)+"%";
+  document.getElementById("paper").style.display="none";
+  document.getElementById("wrong").style.display="none";
+}
+
+function showPaper(){
+  if(!submitted)return;
+  document.getElementById("wrong").style.display="none";
+  const wrap=document.getElementById("paperContent");
+  wrap.innerHTML="";
+  questions.forEach((x,idx)=>{
+    const sel=selectedAnswers[idx];
+    const box=document.createElement("div");
+    box.className="review-q "+(sel===null?"unanswered-box":sel===x.a?"correct-box":"wrong-box");
+    let s="<b>"+(idx+1)+". "+x.q+"</b> <span class='mark'>2 Marks</span>";
+    x.o.forEach((opt,j)=>{
+      let cls="review-opt";
+      if(j===x.a) cls+=" correct-opt";
+      else if(j===sel && sel!==x.a) cls+=" wrong-opt";
+      s+="<div class='"+cls+"'>"+String.fromCharCode(65+j)+". "+opt+(j===x.a?" &nbsp; 🟢 Correct Answer":"")+(j===sel && sel!==x.a?" &nbsp; 🔴 Your Answer":"")+"</div>";
+    });
+    if(sel===null)s+="<div>⚪ Not Attempted</div>";
+    box.innerHTML=s;
+    wrap.appendChild(box);
+  });
+  document.getElementById("paper").style.display="block";
+}
+
+function showWrong(){
+  if(!submitted)return;
+  document.getElementById("paper").style.display="none";
+  const wrap=document.getElementById("wrongContent");
+  wrap.innerHTML="";
+  let count=0;
+  questions.forEach((x,idx)=>{
+    const sel=selectedAnswers[idx];
+    if(sel!==null && sel!==x.a){
+      count++;
+      const box=document.createElement("div");
+      box.className="review-q wrong-box";
+      box.innerHTML="<b>"+(idx+1)+". "+x.q+"</b><div class='review-opt wrong-opt'>🔴 Your Answer: "+x.o[sel]+"</div><div class='review-opt correct-opt'>🟢 Correct Answer: "+x.o[x.a]+"</div>";
+      wrap.appendChild(box);
+    }
+  });
+  if(count===0) wrap.innerHTML="<h3 style='text-align:center;color:#15803d'>🎉 No wrong answers!</h3>";
+  document.getElementById("wrong").style.display="block";
+}
+
+function restartQuiz(){
+  current=0;score=0;answered=0;locked=false;submitted=false;
+  selectedAnswers.fill(null);
+  document.getElementById("score").textContent=0;
+  document.getElementById("answered").textContent=0;
+  document.getElementById("result").style.display="none";
+  document.getElementById("paper").style.display="none";
+  document.getElementById("wrong").style.display="none";
+  document.getElementById("quizCard").style.display="block";
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
